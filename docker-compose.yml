@@ -1,0 +1,23 @@
+version: '3'
+services:
+    adidas-database:
+        image: postgres:9.4
+        env_file:
+            - database.env
+        ports:
+            - 5432:5432
+        networks:
+            - adidas-net
+        volumes:
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    adidas-service:
+        build:
+            context: ./adidas-service
+        ports:
+            - "8080:8080"
+        networks:
+            - adidas-net
+        depends_on:
+            - adidas-database
+networks:
+    adidas-net: 
